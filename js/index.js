@@ -73,7 +73,7 @@ tabsParent.addEventListener('click', (e) => {
 
 //Time
 
-const deadline = '2021-11-03';
+const deadline = '2022-03-03';
 
 function getTimeRemaining(endtime) {
     const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -235,4 +235,53 @@ new MenuCard(
     '.menu .container'
 ).render();
 
+// Forms
 
+const forms = document.querySelectorAll('form');
+forms.forEach(item => {
+    postFormData(item);
+});
+
+const messages = {
+    success: "Thanks! We'll hit you up",
+    failure: 'Something went wrong',
+    loading: 'loading...'
+}
+
+function postFormData(form) {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        let statusMessage = document.createElement('div');
+        statusMessage.classList.add('status');
+        statusMessage.textContent = messages.loading;
+        form.appendChild(statusMessage);
+
+        const request = new XMLHttpRequest();
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'multipart/form-data');
+        const formData = new FormData(form);
+
+        const object = {};
+        formData.forEach((value, key) => {
+            object[key] = value;
+        });
+        const json = JSON.stringify(object);
+
+        request.send(json);
+
+        request.addEventListener('load', () => {
+            if (request.status === 200) {
+                console.log(request.response);
+                statusMessage.textContent = messages.success;
+                form.reset();
+                setTimeout(() => {
+                    statusMessage.remove();
+                }, 2000);
+            } else {
+                console.log('damn');
+                statusMessage.textContent = messages.failure;
+            }
+        });
+    });
+}
