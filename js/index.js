@@ -175,6 +175,24 @@ class MenuCard {
     }
 }
 
+const getMenuData = async () => {
+    const request = await fetch(' http://localhost:3000/menu');
+
+    if (!request.ok) {
+        throw newError(`Could not fetch ${url}, status: ${request.status}`);
+    }
+    return await request.json();
+}
+
+getMenuData()
+    .then(
+        (data) => {
+            data.forEach(({ img, title, descr, price }) => {
+                new MenuCard(img, title, descr, price, '.menu .container').render();
+            })
+        }
+    )
+/* 
 new MenuCard(
     "img/tabs/elite.jpg",
     'Меню “Премиум”',
@@ -197,7 +215,7 @@ new MenuCard(
     'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
     430,
     '.menu .container'
-).render();
+).render(); */
 
 // Forms
 
@@ -212,6 +230,17 @@ const messages = {
     loading: '../img/loading.gif'
 }
 
+const sendFormData = async (url, data) => {
+    let res = await fetch(url, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: data
+    });
+
+    return await res.json();
+};
 
 function postFormData(form) {
     form.addEventListener('submit', (e) => {
@@ -229,15 +258,9 @@ function postFormData(form) {
             object[key] = value;
         });
 
-        fetch('server.php', {
-            method: 'POST',
-            body: JSON.stringify(object),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        sendFormData('http://localhost:3000/requests', JSON.stringify(object))
             .then(data => {
-                console.log(data.text());
+                console.log(data);
                 form.reset();
                 setTimeout(() => {
                     statusMessage.remove();
@@ -246,8 +269,8 @@ function postFormData(form) {
             }).catch(data => {
                 console.log('damn');
                 showThanks(messages.failure);
-            }).finally((data) => {
-                console.log(data, 'got it');
+            }).finally(() => {
+                console.log('got it');
             })
     });
 
@@ -266,3 +289,11 @@ function postFormData(form) {
         modal.appendChild(thanksDialog);
     }
 }
+/* 
+fetch('http://localhost:3000/menu')
+    .then((data) => {
+        return data.json();
+    })
+    .then((res) => {
+        console.log(res);
+    }) */
