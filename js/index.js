@@ -325,76 +325,54 @@ prevBtn.addEventListener('click', () => { plusSlides(1) });
 nextBtn.addEventListener('click', () => { plusSlides(-1) });
  */
 
+const prevBtn = document.querySelector('.offer__slider-next');
+const nextBtn = document.querySelector('.offer__slider-prev');
+const slides = document.querySelectorAll('.offer__slide');
+const slidesImg = document.querySelectorAll('.offer__slide img');
+const slidesWrapper = document.querySelector('.offer__slider-wrapper');
+const sliderInner = document.querySelector('.offer__slider-inner');
+const width = window.getComputedStyle(sliderInner).width;
 let offset = 0;
-let slideIndex = 1;
+let idx = 1;
 
-const slides = document.querySelectorAll('.offer__slide'),
-    prev = document.querySelector('.offer__slider-prev'),
-    next = document.querySelector('.offer__slider-next'),
-    total = document.querySelector('#total'),
-    current = document.querySelector('#current'),
-    slidesWrapper = document.querySelector('.offer__slider-wrapper'),
-    width = window.getComputedStyle(slidesWrapper).width,
-    slidesField = document.querySelector('.offer__slider-inner');
+let currentNumber = document.querySelector('#current');
 
-if (slides.length < 10) {
-    total.textContent = `0${slides.length}`;
-    current.textContent = `0${slideIndex}`;
-} else {
-    total.textContent = slides.length;
-    current.textContent = slideIndex;
+function showImgNumber() {
+    if (idx > slides.length) {
+        idx = 1;
+    } else if (idx < 1) {
+        idx = slides.length;
+    }
+    currentNumber.textContent = '0' + idx;
 }
 
-slidesField.style.width = 100 * slides.length + '%';
-slidesField.style.display = 'flex';
-slidesField.style.transition = '0.5s all';
+showImgNumber();
 
+sliderInner.style.display = 'flex';
+
+slidesImg.forEach(slide => slide.style.width = width);
 slidesWrapper.style.overflow = 'hidden';
 
-slides.forEach(slide => {
-    slide.style.width = width;
-});
-
-next.addEventListener('click', () => {
-    if (offset == (+width.slice(0, width.length - 2) * (slides.length - 1))) {
+nextBtn.addEventListener('click', () => {
+    if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
         offset = 0;
     } else {
         offset += +width.slice(0, width.length - 2);
     }
+    sliderInner.style.transform = `translateX(-${offset}px)`;
 
-    slidesField.style.transform = `translateX(-${offset}px)`;
-
-    if (slideIndex == slides.length) {
-        slideIndex = 1;
-    } else {
-        slideIndex++;
-    }
-
-    if (slides.length < 10) {
-        current.textContent = `0${slideIndex}`;
-    } else {
-        current.textContent = slideIndex;
-    }
+    idx--;
+    showImgNumber();
 });
 
-prev.addEventListener('click', () => {
+prevBtn.addEventListener('click', () => {
     if (offset == 0) {
         offset = +width.slice(0, width.length - 2) * (slides.length - 1);
     } else {
         offset -= +width.slice(0, width.length - 2);
     }
+    sliderInner.style.transform = `translateX(-${offset}px)`;
 
-    slidesField.style.transform = `translateX(-${offset}px)`;
-
-    if (slideIndex == 1) {
-        slideIndex = slides.length;
-    } else {
-        slideIndex--;
-    }
-
-    if (slides.length < 10) {
-        current.textContent = `0${slideIndex}`;
-    } else {
-        current.textContent = slideIndex;
-    }
+    idx++;
+    showImgNumber(idx);
 });
