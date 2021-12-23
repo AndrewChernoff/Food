@@ -353,11 +353,15 @@ sliderInner.style.display = 'flex';
 slidesImg.forEach(slide => slide.style.width = width);
 slidesWrapper.style.overflow = 'hidden';
 
+function getWidth(sliderWidth) {
+    return +sliderWidth.slice(0, sliderWidth.length - 2)
+}
+
 nextBtn.addEventListener('click', () => {
-    if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+    if (offset == getWidth(width) * (slides.length - 1)) {
         offset = 0;
     } else {
-        offset += +width.slice(0, width.length - 2);
+        offset += getWidth(width)
     }
     sliderInner.style.transform = `translateX(-${offset}px)`;
 
@@ -370,9 +374,9 @@ nextBtn.addEventListener('click', () => {
 
 prevBtn.addEventListener('click', () => {
     if (offset == 0) {
-        offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+        offset = getWidth(width) * (slides.length - 1);
     } else {
-        offset -= +width.slice(0, width.length - 2);
+        offset -= getWidth(width);
     }
     sliderInner.style.transform = `translateX(-${offset}px)`;
 
