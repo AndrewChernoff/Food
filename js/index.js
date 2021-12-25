@@ -459,6 +459,37 @@ let sex = 'female',
     age,
     activity = 1.375;
 
+if (localStorage.getItem('activity')) {
+    activity = localStorage.getItem('activity');
+} else {
+    activity = 1.375;
+    localStorage.setItem('activity', 1.375);
+}
+
+if (localStorage.getItem('sex')) {
+    sex = localStorage.getItem('sex');
+} else {
+    sex = 'female';
+    localStorage.setItem('sex', 'female');
+}
+
+function getLocalStorageData(selector, activeClassName) {
+    const elements = document.querySelectorAll(`${selector} div`);
+    elements.forEach(el => { el.classList.remove(activeClassName) });
+    elements.forEach(el => {
+        if (el.getAttribute('data-ratio') === localStorage.getItem('activity')) {
+            el.classList.add(activeClassName);
+        }
+        if (el.getAttribute('id') === localStorage.getItem('sex')) {
+            el.classList.add(activeClassName);
+        }
+    })
+}
+
+getLocalStorageData('#gender', 'calculating__choose-item_active');
+getLocalStorageData('.calculating__choose_big', 'calculating__choose-item_active');
+
+
 function calculate() {
     if (!sex || !height || !weight || !age || !activity) {
         result.textContent = '___';
@@ -476,18 +507,16 @@ calculate();
 
 function getParams(attribute, activeClassName) {
     let element = document.querySelectorAll(`${attribute} div`);
-    //
     element.forEach(el => {
         el.addEventListener('click', (e) => {
             if (e.target.getAttribute('data-ratio')) {
                 activity = +e.target.dataset.ratio;
+                localStorage.setItem('activity', +e.target.dataset.ratio);
             } else {
                 sex = e.target.getAttribute('id');
+                localStorage.setItem('sex', sex);
             }
             console.log(activity, sex);
-            /* else {
-               sex = e.target.getAttribute('id');
-           } */
             element.forEach(el => el.classList.remove(activeClassName));
             e.target.classList.add(activeClassName);
             calculate();
@@ -501,6 +530,7 @@ getParams('.calculating__choose_big', 'calculating__choose-item_active');
 
 function getBodyParams(attribute) {
     let input = document.querySelector(attribute);
+
     input.addEventListener('input', (e) => {
         switch (input.getAttribute('id')) {
             case 'height':
@@ -513,9 +543,13 @@ function getBodyParams(attribute) {
                 age = +input.value;
                 break;
         }
+        if (input.value.match(/\D/g)) {
+            input.style.border = 'red 1px solid';
+        } else {
+            input.style.border = 'none';
+        }
         calculate();
     })
-
 }
 
 getBodyParams('#height');
