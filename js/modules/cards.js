@@ -1,3 +1,5 @@
+import { getMenuData } from '../DAL/dal';
+
 function cards() {
     class MenuCard {
         constructor(img, title, descr, price, elementSelector, ...classes) {
@@ -35,15 +37,6 @@ function cards() {
         }
     }
 
-    const getMenuData = async () => {
-        const request = await fetch(' http://localhost:3000/menu');
-
-        if (!request.ok) {
-            throw newError(`Could not fetch ${url}, status: ${request.status}`);
-        }
-        return await request.json();
-    }
-
     getMenuData()
         .then(
             (data) => {
@@ -54,4 +47,4 @@ function cards() {
         )
 }
 
-module.exports = cards;
+export default cards;

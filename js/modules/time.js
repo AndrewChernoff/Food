@@ -1,7 +1,7 @@
-function time() {
+function time(timerId, deadline) {
     //Time
 
-    const deadline = '2022-03-03';
+    //const deadline = deadline;
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -50,7 +50,7 @@ function time() {
             }
         }
     }
-    setClock('.time', deadline);
+    setClock(timerId, deadline);
 }
 
-module.exports = time;
+export default time;

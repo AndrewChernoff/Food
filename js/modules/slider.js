@@ -1,12 +1,11 @@
-function slider() {
+function slider({ rigthArrow, leftArrow, offerSlide, images, wrapper, slider_Inner }) {
     ////slider
-
-    const prevBtn = document.querySelector('.offer__slider-next');
-    const nextBtn = document.querySelector('.offer__slider-prev');
-    const slides = document.querySelectorAll('.offer__slide');
-    const slidesImg = document.querySelectorAll('.offer__slide img');
-    const slidesWrapper = document.querySelector('.offer__slider-wrapper');
-    const sliderInner = document.querySelector('.offer__slider-inner');
+    const nextBtn = document.querySelector(rigthArrow);
+    const prevBtn = document.querySelector(leftArrow);
+    const slides = document.querySelectorAll(offerSlide);
+    const slidesImg = document.querySelectorAll(images);
+    const slidesWrapper = document.querySelector(wrapper);
+    const sliderInner = document.querySelector(slider_Inner);
     const width = window.getComputedStyle(sliderInner).width;
     let offset = 0;
     let idx = 1;
@@ -33,7 +32,7 @@ function slider() {
         return +sliderWidth.slice(0, sliderWidth.length - 2)
     }
 
-    nextBtn.addEventListener('click', () => {
+    prevBtn.addEventListener('click', () => {
         if (offset == getWidth(width) * (slides.length - 1)) {
             offset = 0;
         } else {
@@ -48,7 +47,7 @@ function slider() {
         dots[idx - 1].style.opacity = 1;
     });
 
-    prevBtn.addEventListener('click', () => {
+    nextBtn.addEventListener('click', () => {
         if (offset == 0) {
             offset = getWidth(width) * (slides.length - 1);
         } else {
@@ -125,4 +124,4 @@ function slider() {
     })
 }
 
-module.exports = slider;
+export default slider;

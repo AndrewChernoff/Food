@@ -1,7 +1,10 @@
-function forms() {
+import { openModal, closemodalWindow } from './modal';
+import { sendFormData } from './../DAL/dal';
+
+function forms(modalSelector, formSelector) {
     // Forms
 
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll(formSelector);
     forms.forEach(item => {
         postFormData(item);
     });
@@ -12,22 +15,11 @@ function forms() {
         loading: '../img/loading.gif'
     }
 
-    const sendFormData = async (url, data) => {
-        let res = await fetch(url, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: data
-        });
-
-        return await res.json();
-    };
-
     function postFormData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
+            let modal = document.querySelector(modalSelector);///
             let statusMessage = document.createElement('img');
             statusMessage.classList.add('status');
             statusMessage.src = messages.loading;
@@ -48,7 +40,7 @@ function forms() {
                         statusMessage.remove();
                         showThanks(messages.success);
                         setTimeout(() => {
-                            closemodalWindow();
+                            closemodalWindow((modalSelector));
                         }, 2000);
                     }, 2000);
                 }).catch(data => {
@@ -60,6 +52,7 @@ function forms() {
         });
 
         function showThanks(message) {
+            let modal = document.querySelector(modalSelector);///
             const prevModalDialog = document.querySelector('.modal__dialog');
             prevModalDialog.classList.add('hide');
             const thanksDialog = document.createElement('div');
@@ -76,4 +69,4 @@ function forms() {
     }
 }
 
-module.exports = forms;
+export default forms;

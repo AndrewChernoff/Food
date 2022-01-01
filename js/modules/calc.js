@@ -107,4 +107,4 @@ function calc() {
     getBodyParams('#age');
 }
 
-module.exports = calc;
+export default calc;
