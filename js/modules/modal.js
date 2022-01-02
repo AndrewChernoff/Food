@@ -10,7 +10,6 @@ function closemodalWindow(modalSelector) {
     const modal = document.querySelector(modalSelector);
     modal.style.display = 'none';
     document.querySelector('body').style.overflow = '';
-    //// bug with modal window
 }
 
 function modal(modalSelector, modalTriggerSelector, openModalInTime) {
